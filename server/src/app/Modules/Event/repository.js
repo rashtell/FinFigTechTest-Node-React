@@ -10,7 +10,7 @@ export async function mCreateEvent(payload) {
   newEvent.save();
 
   const category = payload.category;
-  mCreateEventCategory(category);
+  await mCreateEventCategory(category);
 
   return newEvent;
 }

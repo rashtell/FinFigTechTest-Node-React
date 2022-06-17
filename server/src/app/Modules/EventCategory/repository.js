@@ -4,7 +4,7 @@ const selectAll = "name createdAt updatedAt";
 
 //#region Admin
 export async function mCreateEventCategory(name) {
-  if (EventCategoryModel.exists({ name })) {
+  if (await EventCategoryModel.exists({ name })) {
     return null;
   }
 
