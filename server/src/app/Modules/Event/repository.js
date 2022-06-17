@@ -96,8 +96,6 @@ export async function mSearchEvent(conditions) {
     newConditions["address"] = { $regex: ".*" + address + ".*" };
   }
 
-  console.log(JSON.stringify(newConditions));
-
   return EventModel.find(newConditions).select(selectAll).exec();
 }
 //#endregion
