@@ -1,0 +1,1 @@
+export const PERMISSION_ACTION_ADMIN_CREATE_ADMIN = "create-admin";
