@@ -96,6 +96,9 @@ export async function mSearchEvent(conditions) {
     newConditions["address"] = { $regex: ".*" + address + ".*" };
   }
 
-  return EventModel.find(newConditions).select(selectAll).exec();
+  return EventModel.find(newConditions)
+    .select(selectAll)
+    .sort({ updatedAt: -1, date: -1, category: 1 })
+    .exec();
 }
 //#endregion
