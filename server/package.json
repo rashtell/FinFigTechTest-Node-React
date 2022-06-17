@@ -1,0 +1,53 @@
+{
+  "name": "figfin-techtest",
+  "version": "1.0.0",
+  "description": "A wallet system APIs",
+  "main": "src/index.js",
+  "scripts": {
+    "copyToBuild": "cp -r  src/files build/  && cp -r  src/keys build/  && cp -r  src/logs build/",
+    "copyFromBuild": "cp -r  build/files src/  && cp -r  build/logs src/",
+    "build": "npm-run-all copyFromBuild clean transpile copyToBuild ",
+    "start": "NODE_ENV=production && nodemon . --exec babel-node -e js",
+    "start:dev": "SET NODE_ENV=development && nodemon . --exec babel-node -e js",
+    "server": "node ./build",
+    "dev": "NODE_ENV=development npm-run-all build .",
+    "prod": "NODE_ENV=production npm-run-all build .",
+    "transpile": "babel ./src --out-dir build",
+    "clean": "rimraf build",
+    "watch:dev": "nodemon ./build",
+    "test": "jest"
+  },
+  "keywords": [],
+  "author": "Tella Abdulrasheed",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/runtime": "^7.11.2",
+    "argon2": "^0.27.0",
+    "axios": "^0.20.0",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
+    "http": "0.0.1-security",
+    "https": "^1.0.0",
+    "isomorphic-fetch": "^3.0.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.10.5",
+    "mongoose-sequence": "^5.2.2",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.4.11",
+    "nodemon": "^2.0.4",
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^3.0.2",
+    "twilio": "^3.50.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.11.6",
+    "@babel/core": "^7.11.6",
+    "@babel/node": "^7.10.5",
+    "@babel/plugin-transform-runtime": "^7.11.5",
+    "@babel/preset-env": "^7.11.5"
+  }
+}
