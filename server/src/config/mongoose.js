@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 export const AutoIncrement = require('mongoose-sequence')(mongoose);
 
 module.exports = app => {
-    mongoose.connect('mongodb://localhost:27017/figfin-techtest', {
+    mongoose.connect('mongodb+srv://figfin_admin:finesse2.0@cluster0.bcvhx.mongodb.net/?retryWrites=true&w=majority', {
         useUnifiedTopology: true,
         useNewUrlParser: true,
         useFindAndModify: false
