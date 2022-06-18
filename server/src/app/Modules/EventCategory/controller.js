@@ -7,14 +7,14 @@ export async function cGetEventCategories(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "",
+      msg: "",
       data: events,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
