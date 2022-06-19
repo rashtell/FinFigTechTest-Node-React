@@ -36,6 +36,7 @@ export async function mGetEvents(
     .skip(offset)
     .limit(limit)
     .select(columns)
+    .sort({ date: -1 })
     .exec();
 }
 

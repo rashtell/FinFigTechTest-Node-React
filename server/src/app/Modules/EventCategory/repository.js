@@ -43,8 +43,8 @@ export async function mGetEventCategories(
 
 export async function mUpdateEventCategory(name) {
   //use delete procedure and create procedure to handle cateogry update
-  await this.mDeleteEventCategory(name);
-  return this.mCreateEventCategory(name);
+  await mDeleteEventCategory(name);
+  return mCreateEventCategory(name);
 }
 
 export async function mDeleteEventCategory(name) {

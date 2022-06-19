@@ -6,7 +6,7 @@ import {
   mCreateAdmin,
   mGetAdminById,
   mLoginAdmin,
-  mLogoutAdminById,
+  mLogoutAdminById
 } from "./repository";
 
 //#region No authentication
@@ -49,7 +49,7 @@ export async function cLoginAdmin(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "Login successful",
+      msg: "Login successful",
       data,
       extra: {
         token,
@@ -111,8 +111,8 @@ export async function cCreateAdmin(req, res) {
     };
 
     return res.status(200).json({
-      type: "Success",
-      mgs: "Admin created successfully",
+      type: "success",
+      msg: "Admin created successfully",
       data,
       extra: null,
     });
@@ -141,7 +141,7 @@ export async function cGetAdmin(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "",
+      msg: "",
       data,
       extra: null,
     });
@@ -150,7 +150,7 @@ export async function cGetAdmin(req, res) {
 
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
@@ -166,7 +166,7 @@ export async function cLogoutAdmin(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "Logout succesful",
+      msg: "Logout succesful",
       data: null,
       extra: null,
     });

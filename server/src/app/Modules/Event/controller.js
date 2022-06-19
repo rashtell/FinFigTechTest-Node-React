@@ -35,14 +35,14 @@ export async function cCreateEvent(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "",
+      msg: "",
       data: event,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
@@ -58,14 +58,14 @@ export async function cGetEvents(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "",
+      msg: "",
       data: events,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
@@ -100,15 +100,15 @@ export async function cUpdateEvent(req, res) {
     );
 
     return res.status(200).json({
-      type: "updated",
-      mgs: "",
+      type: "success",
+      msg: "Updated successfully",
       data: event,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
@@ -124,15 +124,15 @@ export async function cDeleteEvent(req, res) {
     const event = await mDeleteEvent({ _id: eventID, adminID });
 
     return res.status(200).json({
-      type: "deleted",
-      mgs: "",
+      type: "success",
+      msg: "Deleted successfully",
       data: event,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
@@ -157,14 +157,14 @@ export async function cSearchEvent(req, res) {
 
     return res.status(200).json({
       type: "success",
-      mgs: "",
+      msg: "",
       data: events,
       extra: null,
     });
   } catch (err) {
     return res.status(400).json({
       type: "error",
-      mgs: err.message,
+      msg: err.message,
       data: null,
       extra: null,
     });
