@@ -1,5 +1,5 @@
 import imagine1 from "assets/img/sidebar-1.jpg";
-import { Component } from "react";
+import React from "react";
 import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
@@ -60,7 +60,7 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-export class Admin extends Component {
+export class Admin extends React.Component {
   /**
    * @param position tr,tc,tl,br,bc,bl
    * @param message message,
