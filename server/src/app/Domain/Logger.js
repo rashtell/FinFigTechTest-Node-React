@@ -1,5 +1,9 @@
 const fs = require("fs");
 
+/**
+ * This function logs error to erro file
+ * @param {string} error
+ */
 export const LogError = (error) => {
   console.log({ LogError: error });
   error = `\n${new Date().toDateString()} - ${new Date().toLocaleTimeString()} :=> ${error}`;

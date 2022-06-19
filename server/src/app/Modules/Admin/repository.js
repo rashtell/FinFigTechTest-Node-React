@@ -1,11 +1,12 @@
 import { verifyHash } from "../../Domain/Encryption";
 import AdminModel from "./model";
 
-//visble columns
+//defualt selectF
 const selectAll = "_id adminID username name email createdAt updatedAt";
 
 //#region
 export async function mAuthenticate({ username, publicKey }) {
+  //validate token details against profile details
   return AdminModel.exists({
     publicKey,
     username,
@@ -49,6 +50,7 @@ export async function mGetAdminById(_id) {
 }
 
 export async function mLogoutAdminById(_id) {
+  //Invalidate public key
   return AdminModel.updateOne({ _id, deleted: false }, { publicKey: null });
 }
 //#endregion

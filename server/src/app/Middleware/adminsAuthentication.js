@@ -5,6 +5,7 @@ import { mAuthenticate } from "../Modules/Admin/repository";
 export default async (req, res, next) => {
   let decodedToken = null;
   try {
+    //attempt to decode the token
     decodedToken = getTokenDetailsFromRequest(req);
   } catch (error) {
     LogError("middleware: adminsAuthentication: " + error);
@@ -16,6 +17,7 @@ export default async (req, res, next) => {
     });
   }
 
+  //check if admin is authenticated
   const isAuthenticated = await mAuthenticate(decodedToken);
 
   if (!isAuthenticated) {

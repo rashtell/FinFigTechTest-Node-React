@@ -5,7 +5,9 @@ const selectAll = "name createdAt updatedAt";
 //#region Admin
 export async function mCreateEventCategory(name) {
   const conditions = { name };
+  //check if category exissts
   if (await EventCategoryModel.exists(conditions)) {
+    //increase the number of event using this catgory
     const eventCount =
       (
         await EventCategoryModel.findOne(conditions).select("eventCount").exec()
@@ -14,6 +16,7 @@ export async function mCreateEventCategory(name) {
     return EventCategoryModel.updateOne(conditions, { eventCount });
   }
 
+  //else create a new category
   const newEventCategory = new EventCategoryModel(conditions);
   return newEventCategory.save();
 }
@@ -39,6 +42,7 @@ export async function mGetEventCategories(
 }
 
 export async function mUpdateEventCategory(name) {
+  //use delete procedure and create procedure to handle cateogry update
   await this.mDeleteEventCategory(name);
   return this.mCreateEventCategory(name);
 }

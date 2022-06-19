@@ -1,6 +1,5 @@
 import { createDigest, createHash } from "../../Domain/Encryption";
 import { LogError } from "../../Domain/Logger";
-import { removeUnwanted } from "../../Domain/Sanitizer";
 import { createToken, getTokenDetailsFromRequest } from "../../Domain/Token";
 import { validateRequired } from "../../Domain/Validation";
 import {
@@ -134,6 +133,7 @@ export async function cCreateAdmin(req, res) {
 
 export async function cGetAdmin(req, res) {
   try {
+    //get current admin details from authentication token
     const { _id } = getTokenDetailsFromRequest(req);
     const { adminID, username, name, email } = await mGetAdminById(_id);
 
@@ -161,6 +161,7 @@ export async function cLogoutAdmin(req, res) {
   try {
     const { _id } = getTokenDetailsFromRequest(req);
 
+    //logout admin
     await mLogoutAdminById(_id);
 
     return res.status(200).json({

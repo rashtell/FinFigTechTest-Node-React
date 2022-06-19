@@ -1,3 +1,8 @@
+/**
+ * This function validates the required inputs exists in the request
+ * @param {Request} req
+ * @param {array} required
+ */
 export const validateRequired = (req, required) => {
   required.forEach((element) => {
     const names = element.name.split(".");

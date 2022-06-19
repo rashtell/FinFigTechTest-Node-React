@@ -1,5 +1,9 @@
+import {
+  mCreateEventCategory,
+  mDeleteEventCategory,
+  mUpdateEventCategory,
+} from "../EventCategory/repository";
 import EventModel from "./model";
-import { mCreateEventCategory } from "../EventCategory/repository";
 
 const selectAll =
   "_id eventID title description category date isVirtual address createdAt updatedAt";
@@ -49,21 +53,34 @@ export async function mUpdateEvent(conditions, payload) {
     throw new Error("The event date has to reference the future");
   }
 
+  //update event
   await EventModel.updateOne(conditions, payload);
 
+  //update event category
   const category = payload.category;
-  await mCreateEventCategory(category);
+  await mUpdateEventCategory(category);
 
   return EventModel.findOne(conditions).select(selectAll).exec();
 }
 
 export async function mDeleteEvent(conditions) {
-  await EventCat
-  return EventModel.findOneAndDelete(conditions).select(selectAll).exec();
+  //delete and get the event
+  const event = await EventModel.findOneAndDelete(conditions)
+    .select(selectAll)
+    .exec();
+
+  //delete procedure for the event category
+  const eventCategory = event.category;
+  await mDeleteEventCategory(eventCategory);
+
+  return event;
 }
 
 export async function mSearchEvent(conditions) {
   const { title, categories, dateRange, isVirtual, address } = conditions;
+
+  //construct search query
+
   let newConditions = {};
 
   let categoriesCondition = [];
@@ -100,6 +117,7 @@ export async function mSearchEvent(conditions) {
     newConditions["address"] = { $regex: ".*" + address + ".*" };
   }
 
+  //get event
   return EventModel.find(newConditions)
     .select(selectAll)
     .sort({ updatedAt: -1, date: -1, category: 1 })

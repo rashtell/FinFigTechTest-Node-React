@@ -2,7 +2,7 @@ import { mGetEventCategories } from "./repository";
 
 export async function cGetEventCategories(req, res) {
   try {
-    //create event
+    //get all event categories
     const events = await mGetEventCategories(null, null, null, {});
 
     return res.status(200).json({

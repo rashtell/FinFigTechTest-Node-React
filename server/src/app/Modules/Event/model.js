@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 
 let EventSchema = new Schema(
   {
@@ -28,7 +28,7 @@ let EventSchema = new Schema(
       default: false,
     },
     address: {
-      type: Schema.Types.String
+      type: Schema.Types.String,
     },
     eventID: {
       type: Schema.Types.Number,

@@ -5,6 +5,7 @@ import morgan from "morgan";
 
 const app = express();
 
+//setup database
 require("./config/mongoose.js")(app);
 
 app.use(morgan("dev"));
@@ -20,6 +21,7 @@ app.get("/", (req, res) => {
 
 require("./app/routeHandler").default(app);
 
+//handle unfound endpoints
 app.all("*", (req, res) => {
   return res.status(404).json({
     type: "error",

@@ -53,7 +53,7 @@ export async function cGetEvents(req, res) {
   try {
     const { _id: adminID } = getTokenDetailsFromRequest(req);
 
-    //create event
+    //get events
     const events = await mGetEvents(null, null, null, { adminID });
 
     return res.status(200).json({
@@ -146,7 +146,7 @@ export async function cSearchEvent(req, res) {
   try {
     const { title, categories, dateRange, isVirtual, address } = req.body.data;
 
-    //search event
+    //search for events that meets the filter conditions
     const events = await mSearchEvent({
       title,
       categories,

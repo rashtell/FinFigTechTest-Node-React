@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 export const AutoIncrement = require("mongoose-sequence")(mongoose);
 
 module.exports = (app) => {
+  //connect to db
   mongoose
     .connect(
       "mongodb+srv://figfin_admin:finesse2.0@cluster0.bcvhx.mongodb.net/?retryWrites=true&w=majority",

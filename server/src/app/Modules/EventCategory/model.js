@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 const AutoIncrement = require("mongoose-sequence")(mongoose);
-import { Schema, model } from "mongoose";
+import { model, Schema } from "mongoose";
 
 let EventCategorySchema = new Schema(
   {
