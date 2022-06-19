@@ -51,10 +51,14 @@ export async function mUpdateEvent(conditions, payload) {
 
   await EventModel.updateOne(conditions, payload);
 
+  const category = payload.category;
+  await mCreateEventCategory(category);
+
   return EventModel.findOne(conditions).select(selectAll).exec();
 }
 
 export async function mDeleteEvent(conditions) {
+  await EventCat
   return EventModel.findOneAndDelete(conditions).select(selectAll).exec();
 }
 

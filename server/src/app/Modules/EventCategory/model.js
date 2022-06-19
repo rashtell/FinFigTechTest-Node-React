@@ -8,6 +8,10 @@ let EventCategorySchema = new Schema(
       type: Schema.Types.String,
       required: [true, "Event category name is required"],
     },
+    eventCount: {
+      type: Schema.Types.Number,
+      default: 1,
+    },
     eventCategoryID: {
       type: Schema.Types.Number,
     },
