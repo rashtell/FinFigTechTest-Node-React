@@ -8,7 +8,7 @@ import {
   FloatingLabel,
   Form,
   Row,
-  Spinner
+  Spinner,
 } from "react-bootstrap";
 import { connect } from "react-redux";
 import Header from "../components/Header/Header";
@@ -17,11 +17,14 @@ import {
   createEvent,
   deleteEvent,
   getEvents,
-  updateEvent
+  updateEvent,
 } from "../redux/actions/fetch/admin/event.admin.action";
 import {
+  clearAdminCreateEventResponseMessage,
+  clearAdminDeleteEventResponseMessage,
+  clearAdminUpdateEventResponseMessage,
   setAdminCreateEventRequestParams,
-  setAdminUpdateEventRequestParams
+  setAdminUpdateEventRequestParams,
 } from "../redux/actions/index.actions";
 
 const mapStateToProps = (state, props) => {
@@ -61,16 +64,25 @@ const mapDispatchToProps = (dispatch) => ({
   invokeAdminCreateEvent(payload) {
     dispatch(createEvent(payload));
   },
+  invokeClearAdminCreateEventResponseMessage() {
+    dispatch(clearAdminCreateEventResponseMessage());
+  },
 
   invokeSetAdminUpdateEventParams(payload) {
     dispatch(setAdminUpdateEventRequestParams(payload));
   },
   invokeAdminUpdateEvent(payload) {
-    dispatch(updateEvent(payload));
+    dispatch(updateEvent(payload._id, payload));
+  },
+  invokeClearAdminUpdateEventResponseMessage() {
+    dispatch(clearAdminUpdateEventResponseMessage());
   },
 
   invokeAdminDeleteEvent(id) {
     dispatch(deleteEvent(id));
+  },
+  invokeClearAdminDeleteEventResponseMessage() {
+    dispatch(clearAdminDeleteEventResponseMessage());
   },
 });
 
@@ -84,9 +96,18 @@ class Events extends React.Component {
     this.props.invokeAdminGetEvent();
   }
 
+  chnageToCreateMode() {
+    this.setState({ isCreate: true });
+  }
+
+  chnageToUpdateMode() {
+    this.setState({ isCreate: false });
+  }
+
   updateEvent(event) {
+    this.chnageToUpdateMode();
     //set the select event (for update) details to the request parasms state
-    this.props.setAdminUpdateEventRequestParams(event);
+    this.props.invokeSetAdminUpdateEventParams(event);
 
     //scroll to the edit form
     window.scrollTo(0, 0);
@@ -96,9 +117,12 @@ class Events extends React.Component {
     const { invokeAdminDeleteEvent } = this.props;
 
     //double check if you really want to delete this event
-    if (window.confirm("Are you sure you want to delete this event ? ")) {
-      invokeAdminDeleteEvent(id);
+    if (!window.confirm("Are you sure you want to delete this event ? ")) {
+      return null;
     }
+
+    //delete event
+    invokeAdminDeleteEvent(id);
   }
 
   /**
@@ -135,11 +159,18 @@ class Events extends React.Component {
       updateEventResponseMessage,
       updateEventResponse,
 
+      deleteEventResponseMessage,
+      deleteEventResponse,
+
       invokeSetAdminCreateEventParams,
       invokeAdminCreateEvent,
 
       invokeSetAdminUpdateEventParams,
       invokeAdminUpdateEvent,
+
+      invokeClearAdminCreateEventResponseMessage,
+      invokeClearAdminUpdateEventResponseMessage,
+      invokeClearAdminDeleteEventResponseMessage,
     } = this.props;
     const { isCreate } = this.state;
 
@@ -154,14 +185,44 @@ class Events extends React.Component {
     const setRequestParams = isCreate
       ? invokeSetAdminCreateEventParams
       : invokeSetAdminUpdateEventParams;
-    const actionEvent = isCreate
+    const invokeEventAction = isCreate
       ? invokeAdminCreateEvent
       : invokeAdminUpdateEvent;
+    const invokeClearEventAction = isCreate
+      ? invokeClearAdminCreateEventResponseMessage
+      : invokeClearAdminUpdateEventResponseMessage;
 
     //convert the unix date format from state to input acceptable format
     const eventDate = this.getInputDateFormat(request.date);
 
     const header = isCreate ? "Create event" : "Update event";
+
+    //diplay response error message
+    if (responseMessage && !response.title) {
+      //clear error response message
+      invokeClearEventAction();
+      //display error response message
+      this.props.handleError(responseMessage);
+    }
+    //diplay response success message
+    else if (responseMessage && response.title) {
+      //clear success response message
+      invokeClearEventAction();
+      //display success response message
+      this.props.handleSuccess(responseMessage);
+      this.chnageToCreateMode();
+    }
+
+    //diplay response error message
+    if (deleteEventResponseMessage && !deleteEventResponse.title) {
+      invokeClearAdminDeleteEventResponseMessage();
+      this.props.handleError(deleteEventResponseMessage);
+    }
+    //diplay response success message
+    else if (deleteEventResponseMessage && deleteEventResponse.title) {
+      invokeClearAdminDeleteEventResponseMessage();
+      this.props.handleSuccess(deleteEventResponseMessage);
+    }
 
     return (
       <Card>
@@ -276,26 +337,54 @@ class Events extends React.Component {
                     </Col>
                   </Row>
 
-                  <Button
-                    className="mt-3 "
-                    variant="primary"
-                    type="button"
-                    disabled={loading}
-                    onClick={() => {
-                      actionEvent(request);
-                    }}
-                  >
-                    {loading ? (
-                      <span>
-                        <span className="text-primary me-2">
-                          {isCreate ? "Creating" : "Updating"}
+                  <div className="d-flex justify-content-between align-items-center">
+                    <Button
+                      className="mt-3 "
+                      variant="primary"
+                      type="button"
+                      disabled={loading}
+                      onClick={() => {
+                        invokeEventAction(request);
+                      }}
+                    >
+                      {loading ? (
+                        <span>
+                          <span className="text-primary me-2">
+                            {isCreate ? "Creating" : "Updating"}
+                          </span>
+                          <Spinner
+                            animation="grow"
+                            variant="primary"
+                            size="sm"
+                          />
                         </span>
-                        <Spinner animation="grow" variant="primary" size="sm" />
-                      </span>
-                    ) : (
-                      <span>{isCreate ? "Create" : "Update"}</span>
-                    )}
-                  </Button>
+                      ) : (
+                        <span>{isCreate ? "Create" : "Update"}</span>
+                      )}
+                    </Button>
+
+                    <Button
+                      className="mt-3 ms-3"
+                      variant="secondary"
+                      type="button"
+                      onClick={() => {
+                        //reset request params
+                        setRequestParams({
+                          title: "",
+                          description: "",
+                          category: "",
+                          date: "",
+                          isVirtual: false,
+                          address: "",
+                        });
+
+                        //change to create mode
+                        this.chnageToCreateMode();
+                      }}
+                    >
+                      Cancel
+                    </Button>
+                  </div>
                 </Form>
               </Accordion.Body>
             </Accordion.Item>

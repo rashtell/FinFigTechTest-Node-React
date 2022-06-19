@@ -36,7 +36,7 @@ export const createEvent =
       dispatch
     ).then(() => {
       //get an updated list of the admin's events
-      this.getEvents();
+      dispatch(getEvents());
     });
   };
 
@@ -70,7 +70,7 @@ export const updateEvent =
       dispatch
     ).then(() => {
       //get an updated list of the admin's events
-      this.getEvents();
+      dispatch(getEvents());
     });
   };
 
@@ -78,13 +78,14 @@ export const deleteEvent = (id) => (dispatch) => {
   dispatch({ type: ReduxConstants.fetch.admin.event.deleteEvent.LOADING });
 
   return handleEventRequest(
-    fetch(`${baseurl}/v1/admins/events/logout/event/${id}`, {
+    fetch(`${baseurl}/v1/admins/events/delete/event/${id}`, {
       headers: headers(),
       method: "DELETE",
     }),
     "deleteEvent",
     dispatch
   ).then(() => {
-    this.getEvents();
+    //get an updated list of the admin's events
+    dispatch(getEvents());
   });
 };

@@ -44,6 +44,15 @@ const searchEvent = (state = searchEventInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.event.searchEvent.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: searchEventInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -77,6 +86,15 @@ const getEventCategories = (state = getEventCategoriesInitialState, action) => {
         response: {
           data: getEventCategoriesInitialState.response.data,
           message: action.payload,
+        },
+      };
+
+    case ReduxConstants.fetch.event.getEventCategories.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: getEventCategoriesInitialState.response.message,
         },
       };
 

@@ -93,27 +93,53 @@ export const setLoginAdminRequestParams = (payload) => ({
   type: ReduxConstants.fetch.admin.loginAdmin.SET_REQUEST_PARAMS,
   payload,
 });
+
 export const logoutLocaly = () => (dispatch) => {
   dispatch({ type: ReduxConstants.app.UNSET_AUTHENTICATED });
   console.log("logoutLocaly");
   localStorage.removeItem("figfin-token");
   localStorage.removeItem("figfin-authed");
 };
-
 export const setAuthState = () => (dispatch) => {
   localStorage.setItem("figfin-authed", "true");
   dispatch({ type: ReduxConstants.app.SET_AUTHENTICATED, payload: true });
 };
+
+export const clearCreateAdminResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.createAdmin.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearLoginAdminResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.loginAdmin.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearGetAdminResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.getAdmin.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearLogoutAdminResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.logoutAdmin.CLEAR_RESPONSE_MESSAGE,
+});
 //#endregion
 
 //#region  Admin Event
 export const setAdminCreateEventRequestParams = (payload) => ({
-  type: ReduxConstants.fetch.admin.createEvent.SET_REQUEST_PARAMS,
+  type: ReduxConstants.fetch.admin.event.createEvent.SET_REQUEST_PARAMS,
   payload,
 });
 export const setAdminUpdateEventRequestParams = (payload) => ({
-  type: ReduxConstants.fetch.admin.updateEvent.SET_REQUEST_PARAMS,
+  type: ReduxConstants.fetch.admin.event.updateEvent.SET_REQUEST_PARAMS,
   payload,
+});
+
+export const clearAdminCreateEventResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.event.createEvent.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearAdminGetEventsResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.event.getEvents.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearAdminUpdateEventResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.event.updateEvent.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearAdminDeleteEventResponseMessage = () => ({
+  type: ReduxConstants.fetch.admin.event.deleteEvent.CLEAR_RESPONSE_MESSAGE,
 });
 //#endregion
 
@@ -121,5 +147,12 @@ export const setAdminUpdateEventRequestParams = (payload) => ({
 export const setUserSearchEventRequestParams = (payload) => ({
   type: ReduxConstants.fetch.event.searchEvent.SET_REQUEST_PARAMS,
   payload,
+});
+
+export const clearUserSearchEventResponseMessage = () => ({
+  type: ReduxConstants.fetch.event.searchEvent.CLEAR_RESPONSE_MESSAGE,
+});
+export const clearUserGetEventCategoriesResponseMessage = () => ({
+  type: ReduxConstants.fetch.event.getEventCategories.CLEAR_RESPONSE_MESSAGE,
 });
 //#endregion

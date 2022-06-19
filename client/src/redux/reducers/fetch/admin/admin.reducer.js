@@ -47,6 +47,15 @@ const createAdmin = (state = createAdminInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.createAdmin.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: createAdminInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -96,6 +105,15 @@ const loginAdmin = (state = loginAdminInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.loginAdmin.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: loginAdminInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -141,6 +159,15 @@ const getAdmin = (state = getAdminInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.getAdmin.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: getAdminInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -177,6 +204,15 @@ const logoutAdmin = (state = logoutAdminInitialState, action) => {
         response: {
           data: logoutAdminInitialState.response.data,
           message: action.payload,
+        },
+      };
+
+    case ReduxConstants.fetch.admin.logoutAdmin.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: logoutAdminInitialState.response.message,
         },
       };
 

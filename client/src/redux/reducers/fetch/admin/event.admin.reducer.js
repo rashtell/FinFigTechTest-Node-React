@@ -54,6 +54,15 @@ const createEvent = (state = createEventInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.event.createEvent.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: createEventInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -87,6 +96,15 @@ const getEvents = (state = getEventsInitialState, action) => {
         response: {
           data: getEventsInitialState.response.data,
           message: action.payload,
+        },
+      };
+
+    case ReduxConstants.fetch.admin.event.getEvents.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: getEventsInitialState.response.message,
         },
       };
 
@@ -148,6 +166,15 @@ const updateEvent = (state = updateEventInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.event.updateEvent.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: updateEventInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -195,6 +222,15 @@ const deleteEvent = (state = deleteEventInitialState, action) => {
         },
       };
 
+    case ReduxConstants.fetch.admin.event.deleteEvent.CLEAR_RESPONSE_MESSAGE:
+      return {
+        ...state,
+        response: {
+          ...state.response,
+          message: deleteEventInitialState.response.message,
+        },
+      };
+
     default:
       return state;
   }
@@ -204,7 +240,7 @@ const adminEventReducer = combineReducers({
   createEvent,
   getEvents,
   updateEvent,
-  deleteEvent
+  deleteEvent,
 });
 
 export default adminEventReducer;

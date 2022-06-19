@@ -1,5 +1,6 @@
 import React from "react";
 import {
+  Alert,
   Button,
   Card,
   Container,
@@ -13,6 +14,8 @@ import {
   loginAdmin,
 } from "../redux/actions/fetch/admin/admin.actions";
 import {
+  clearCreateAdminResponseMessage,
+  clearLoginAdminResponseMessage,
   setCreateAdminRequestParams,
   setLoginAdminRequestParams,
 } from "../redux/actions/index.actions";
@@ -29,7 +32,7 @@ const mapStateToProps = (state, props) => {
     loginAdminResponseLoading: state.fetch.admin.admin.loginAdmin.loading,
     loginAdminResponse: state.fetch.admin.admin.loginAdmin.response.data,
     loginAdminResponseMessage:
-      state.fetch.admin.admin.createAdmin.response.message,
+      state.fetch.admin.admin.loginAdmin.response.message,
   };
 };
 
@@ -40,12 +43,18 @@ const mapDispatchToProps = (dispatch, props) => ({
   invokeCreateAdmin(payload) {
     dispatch(createAdmin(payload));
   },
+  invokeClearCreateAdminResponseMessage() {
+    dispatch(clearCreateAdminResponseMessage());
+  },
 
   invokeSetLoginAdminRequestParams(payload) {
     dispatch(setLoginAdminRequestParams(payload));
   },
   invokeLoginAdmin(payload) {
     dispatch(loginAdmin(payload));
+  },
+  invokeClearLoginAdminResponseMessage() {
+    dispatch(clearLoginAdminResponseMessage());
   },
 });
 
@@ -66,6 +75,49 @@ class Login extends React.Component {
         </p>
       </div>
     );
+  }
+
+  /**
+   * This method handles error message rendering for create and login admin
+   * @returns JSX
+   */
+  renderError() {
+    const { isNewUser } = this.state;
+    const {
+      createAdminResponseMessage,
+      createAdminResponse,
+
+      loginAdminResponseMessage,
+      loginAdminResponse,
+
+      invokeClearCreateAdminResponseMessage,
+      invokeClearLoginAdminResponseMessage,
+    } = this.props;
+
+    //select params and methods based on the current mode (new or existing)
+    const responseMessage = isNewUser
+      ? createAdminResponseMessage
+      : loginAdminResponseMessage;
+    const response = isNewUser ? createAdminResponse : loginAdminResponse;
+    const invokeClearAction = isNewUser
+      ? invokeClearCreateAdminResponseMessage
+      : invokeClearLoginAdminResponseMessage;
+
+    //check if response message is an error
+    if (responseMessage && !response.username) {
+      //clear response message after 3 seconds
+      setTimeout(() => {
+        invokeClearAction();
+      }, 3000);
+
+      return (
+        <Alert key="danger" variant="danger">
+          {responseMessage}
+        </Alert>
+      );
+    }
+
+    return <></>;
   }
 
   /**
@@ -130,9 +182,11 @@ class Login extends React.Component {
                 </Button>
               </div>
 
-              <h3 className="text-center">
+              <h3 className="text-center mb-2">
                 {isNewUser ? "Create account" : "Login"}
               </h3>
+
+              {this.renderError()}
             </div>
 
             <Form>
