@@ -1,13 +1,15 @@
 const fs = require("fs");
 
 export const LogError = (error) => {
-  console.log({ error });
+  console.log({ LogError: error });
   error = `\n${new Date().toDateString()} - ${new Date().toLocaleTimeString()} :=> ${error}`;
 
   const dir = "src/logs";
 
   fs.appendFile(dir + "/node.error.log", error, function (err) {
-    console.log("Log error: ", err);
+    if (err) {
+      console.log("Log error: ", err);
+    }
   });
 };
 
