@@ -28,4 +28,5 @@ const AdminContants = {
     SET_REQUEST_PARAMS: "FETCH_ADMIN_LOGOUT_ADMIN_SET_REQUEST_PARAMS",
   },
 };
+
 export default AdminContants;

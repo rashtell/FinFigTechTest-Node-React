@@ -22,23 +22,23 @@ const createAdminInitialState = {
 };
 const createAdmin = (state = createAdminInitialState, action) => {
   switch (action.type) {
-    case ReduxConstants.fetch.event.createAdmin.SET_REQUEST_PARAMS:
+    case ReduxConstants.fetch.admin.createAdmin.SET_REQUEST_PARAMS:
       return { ...state, request: { ...state.request, ...action.payload } };
 
-    case ReduxConstants.fetch.event.createAdmin.LOADING:
-      return { ...state, fetching: true };
+    case ReduxConstants.fetch.admin.createAdmin.LOADING:
+      return { ...state, loading: true };
 
-    case ReduxConstants.fetch.event.createAdmin.LOADED:
-      return { ...state, fetching: false };
+    case ReduxConstants.fetch.admin.createAdmin.LOADED:
+      return { ...state, loading: false };
 
-    case ReduxConstants.fetch.event.createAdmin.LOAD_SUCCESS:
+    case ReduxConstants.fetch.admin.createAdmin.LOAD_SUCCESS:
       return {
         ...state,
         request: createAdminInitialState.request,
         response: action.payload,
       };
 
-    case ReduxConstants.fetch.event.createAdmin.LOAD_FAILED:
+    case ReduxConstants.fetch.admin.createAdmin.LOAD_FAILED:
       return {
         ...state,
         response: {
@@ -71,23 +71,23 @@ const loginAdminInitialState = {
 };
 const loginAdmin = (state = loginAdminInitialState, action) => {
   switch (action.type) {
-    case ReduxConstants.fetch.event.loginAdmin.SET_REQUEST_PARAMS:
+    case ReduxConstants.fetch.admin.loginAdmin.SET_REQUEST_PARAMS:
       return { ...state, request: { ...state.request, ...action.payload } };
 
-    case ReduxConstants.fetch.event.loginAdmin.LOADING:
-      return { ...state, fetching: true };
+    case ReduxConstants.fetch.admin.loginAdmin.LOADING:
+      return { ...state, loading: true };
 
-    case ReduxConstants.fetch.event.loginAdmin.LOADED:
-      return { ...state, fetching: false };
+    case ReduxConstants.fetch.admin.loginAdmin.LOADED:
+      return { ...state, loading: false };
 
-    case ReduxConstants.fetch.event.loginAdmin.LOAD_SUCCESS:
+    case ReduxConstants.fetch.admin.loginAdmin.LOAD_SUCCESS:
       return {
         ...state,
         request: loginAdminInitialState.request,
         response: action.payload,
       };
 
-    case ReduxConstants.fetch.event.loginAdmin.LOAD_FAILED:
+    case ReduxConstants.fetch.admin.loginAdmin.LOAD_FAILED:
       return {
         ...state,
         response: {
@@ -117,22 +117,22 @@ const getAdminInitialState = {
 };
 const getAdmin = (state = getAdminInitialState, action) => {
   switch (action.type) {
-    case ReduxConstants.fetch.event.getAdmin.SET_REQUEST_PARAMS:
+    case ReduxConstants.fetch.admin.getAdmin.SET_REQUEST_PARAMS:
       return { ...state, request: null };
 
-    case ReduxConstants.fetch.event.getAdmin.LOADING:
-      return { ...state, fetching: true };
+    case ReduxConstants.fetch.admin.getAdmin.LOADING:
+      return { ...state, loading: true };
 
-    case ReduxConstants.fetch.event.getAdmin.LOADED:
-      return { ...state, fetching: false };
+    case ReduxConstants.fetch.admin.getAdmin.LOADED:
+      return { ...state, loading: false };
 
-    case ReduxConstants.fetch.event.getAdmin.LOAD_SUCCESS:
+    case ReduxConstants.fetch.admin.getAdmin.LOAD_SUCCESS:
       return {
         ...state,
         response: action.payload,
       };
 
-    case ReduxConstants.fetch.event.getAdmin.LOAD_FAILED:
+    case ReduxConstants.fetch.admin.getAdmin.LOAD_FAILED:
       return {
         ...state,
         response: {
@@ -156,22 +156,22 @@ const logoutAdminInitialState = {
 };
 const logoutAdmin = (state = logoutAdminInitialState, action) => {
   switch (action.type) {
-    case ReduxConstants.fetch.event.logoutAdmin.SET_REQUEST_PARAMS:
+    case ReduxConstants.fetch.admin.logoutAdmin.SET_REQUEST_PARAMS:
       return { ...state, request: null };
 
-    case ReduxConstants.fetch.event.logoutAdmin.LOADING:
-      return { ...state, fetching: true };
+    case ReduxConstants.fetch.admin.logoutAdmin.LOADING:
+      return { ...state, loading: true };
 
-    case ReduxConstants.fetch.event.logoutAdmin.LOADED:
-      return { ...state, fetching: false };
+    case ReduxConstants.fetch.admin.logoutAdmin.LOADED:
+      return { ...state, loading: false };
 
-    case ReduxConstants.fetch.event.logoutAdmin.LOAD_SUCCESS:
+    case ReduxConstants.fetch.admin.logoutAdmin.LOAD_SUCCESS:
       return {
         ...state,
         response: action.payload,
       };
 
-    case ReduxConstants.fetch.event.logoutAdmin.LOAD_FAILED:
+    case ReduxConstants.fetch.admin.logoutAdmin.LOAD_FAILED:
       return {
         ...state,
         response: {

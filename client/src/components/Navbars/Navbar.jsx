@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { Navbar } from "react-bootstrap";
 
-import AdminNavbarLinks from "./AdminNavbarLinks.jsx";
+import NavbarLinks from "./NavbarLinks.jsx";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state, props) => ({
@@ -56,7 +56,7 @@ class Header extends Component {
         </Navbar.Header>
 
         <Navbar.Collapse>
-          <AdminNavbarLinks />
+          <NavbarLinks />
         </Navbar.Collapse>
       </Navbar>
     );

@@ -1,4 +1,3 @@
-import { logout } from "actions/index.admin.actions";
 import React, { Component } from "react";
 import { Nav, NavItem } from "react-bootstrap";
 import { connect } from "react-redux";
@@ -7,19 +6,18 @@ import RingLoader from "react-spinners/RingLoader";
 
 const mapStateToProps = (state, props) => ({
   ...props,
-  fetching: state.fetching
+  loading: false
 });
 
 const mapDispatchToProps = dispatch => ({
   onLogout() {
-    dispatch(logout());
   }
 });
 
-class AdminNavbarLinks extends Component {
+class NavbarLinks extends Component {
   render() {
 
-    const { onLogout, fetching } = this.props;
+    const { onLogout, loading } = this.props;
 
     // const notification = (
     //   <div>
@@ -66,7 +64,7 @@ class AdminNavbarLinks extends Component {
           <NavItem eventKey={4} >
             <RingLoader
               size={30}
-              loading={fetching}
+              loading={loading}
             />
           </NavItem>
 
@@ -116,4 +114,4 @@ class AdminNavbarLinks extends Component {
 export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(AdminNavbarLinks);
+)(NavbarLinks);

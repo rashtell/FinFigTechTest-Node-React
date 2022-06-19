@@ -6,19 +6,21 @@ export const headers = () => ({
   "Content-Type": "application/json",
 });
 
-const port = process.env.PORT ?? 4048;
+const port = process.env.PORT ?? 4480;
 export const baseurl = "http://localhost:" + port;
 
 export const handleResponse = async (request, actionName = "", dispatch) => {
   let fetchConstant = ReduxConstants.fetch;
-  [fetchConstant, ...actionName.split(".")].reduce((prev, curr) => prev[curr]);
+  fetchConstant = [fetchConstant, ...actionName.split(".")].reduce(
+    (prev, curr) => prev[curr]
+  );
 
-  return request()
+  return request
     .then((res) => res.json())
     .then((resJson) => {
       const data = resJson.data;
       const type = resJson.type;
-      const message = resJson.message;
+      const message = resJson.msg;
 
       if (type == "error") {
         dispatch({
@@ -57,6 +59,17 @@ export const setAppError = (payload) => ({
   type: ReduxConstants.app.SET_ERROR,
   payload,
 });
+export const clearAppError = () => ({
+  type: ReduxConstants.app.CLEAR_ERROR,
+});
+
+export const setAppSuccess = (payload) => ({
+  type: ReduxConstants.app.SET_SUCCESS,
+  payload,
+});
+export const clearAppSuccess = () => ({
+  type: ReduxConstants.app.CLEAR_SUCCESS,
+});
 //#endregion
 
 //#region Admin
@@ -68,6 +81,17 @@ export const setLoginAdminRequestParams = (payload) => ({
   type: ReduxConstants.fetch.admin.loginAdmin.SET_REQUEST_PARAMS,
   payload,
 });
+export const logoutLocaly = () => (dispatch) => {
+  dispatch({ type: ReduxConstants.app.UNSET_AUTHENTICATED });
+  console.log("logoutLocaly");
+  localStorage.removeItem("figfin-token");
+  localStorage.removeItem("figfin-authed");
+};
+
+export const setAuthState = () => (dispatch) => {
+  localStorage.setItem("figfin-authed", "true");
+  dispatch({ type: ReduxConstants.app.SET_AUTHENTICATED, payload: true });
+};
 //#endregion
 
 //#region  Admin Event

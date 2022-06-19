@@ -1,5 +1,11 @@
 import ReduxConstants from "../../../constants/index.constants";
-import { baseurl, handleResponse, headers } from "../../index.actions";
+import {
+  baseurl,
+  handleResponse,
+  headers,
+  logoutLocaly,
+  setAuthState,
+} from "../../index.actions";
 
 const handleAdminRequest = async (request, actionName, dispatch) => {
   return handleResponse(request, "admin." + actionName, dispatch);
@@ -28,24 +34,29 @@ export const createAdmin =
     );
   };
 
-export const loginAdmin = (username, password) => (dispatch) => {
-  dispatch({ type: ReduxConstants.fetch.admin.loginAdmin.LOADING });
+export const loginAdmin =
+  ({ username, password }) =>
+  (dispatch) => {
+    dispatch({ type: ReduxConstants.fetch.admin.loginAdmin.LOADING });
 
-  return handleAdminRequest(
-    fetch(`${baseurl}/v1/admins/login/admin`, {
-      headers: headers(),
-      method: "POST",
-      body: JSON.stringify({ data: { username: username, password } }),
-    }),
-    "loginAdmin",
-    dispatch
-  ).then((resJon) => {
-    const token = resJon.extra.token ?? "";
-    localStorage.setItem("figfin-token", token);
+    return handleAdminRequest(
+      fetch(`${baseurl}/v1/admins/login/admin`, {
+        headers: headers(),
+        method: "POST",
+        body: JSON.stringify({ data: { username, password } }),
+      }),
+      "loginAdmin",
+      dispatch
+    ).then((resJon) => {
+      if (resJon.extra && resJon.extra.token) {
+        const token = resJon.extra.token ?? "";
 
-    dispatch({ type: ReduxConstants.app.SET_AUTHENTICATED, payload: true });
-  });
-};
+        localStorage.setItem("figfin-token", token);
+
+        dispatch(setAuthState());
+      }
+    });
+  };
 
 export const getAdmin = () => (dispatch) => {
   dispatch({ type: ReduxConstants.fetch.admin.getAdmin.LOADING });
@@ -61,7 +72,7 @@ export const getAdmin = () => (dispatch) => {
 };
 
 export const logoutAdmin = () => (dispatch) => {
-  dispatch({ type: RReduxConstants.fetch.admin.logoutAdmin.LOADING });
+  dispatch({ type: ReduxConstants.fetch.admin.logoutAdmin.LOADING });
 
   return handleAdminRequest(
     fetch(`${baseurl}/v1/admins/logout/admin`, {
@@ -71,8 +82,6 @@ export const logoutAdmin = () => (dispatch) => {
     "logoutAdmin",
     dispatch
   ).then((resJson) => {
-    localStorage.removeItem("figfin-token");
-
-    dispatch({ type: ReduxConstants.app.SET_AUTHENTICATED, payload: false });
+    dispatch(logoutLocaly());
   });
 };

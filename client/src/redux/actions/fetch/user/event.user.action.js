@@ -1,12 +1,12 @@
 import ReduxConstants from "../../../constants/index.constants";
 import { baseurl, handleResponse, headers } from "../../index.actions";
 
-const handleEventRequest = async (request, actionName) => {
-  return handleResponse(request, "event." + actionName);
+const handleEventRequest = async (request, actionName, dispatch) => {
+  return handleResponse(request, "event." + actionName, dispatch);
 };
 
 export const searchEvent =
-  ({ title, categories, dateRange: { from, to }, isVirtual, address }) =>
+  ({ title, categories, dateRange, isVirtual, address }) =>
   (dispatch) => {
     dispatch({ type: ReduxConstants.fetch.event.searchEvent.LOADING });
 

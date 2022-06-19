@@ -4,8 +4,11 @@ import ReduxConstants from "../../../constants/index.constants";
 const searchEventInitialState = {
   request: {
     title: "",
-    categories: [],
-    dateRange: null,
+    categories: null,
+    dateRange: {
+      from: null,
+      to: null,
+    },
     isVirtual: null,
     address: "",
   },
@@ -21,10 +24,10 @@ const searchEvent = (state = searchEventInitialState, action) => {
       return { ...state, request: { ...state.request, ...action.payload } };
 
     case ReduxConstants.fetch.event.searchEvent.LOADING:
-      return { ...state, fetching: true };
+      return { ...state, loading: true };
 
     case ReduxConstants.fetch.event.searchEvent.LOADED:
-      return { ...state, fetching: false };
+      return { ...state, loading: false };
 
     case ReduxConstants.fetch.event.searchEvent.LOAD_SUCCESS:
       return {
@@ -60,10 +63,10 @@ const getEventCategories = (state = getEventCategoriesInitialState, action) => {
       return { ...state, request: null };
 
     case ReduxConstants.fetch.event.getEventCategories.LOADING:
-      return { ...state, fetching: true };
+      return { ...state, loading: true };
 
     case ReduxConstants.fetch.event.getEventCategories.LOADED:
-      return { ...state, fetching: false };
+      return { ...state, loading: false };
 
     case ReduxConstants.fetch.event.getEventCategories.LOAD_SUCCESS:
       return { ...state, response: action.payload };

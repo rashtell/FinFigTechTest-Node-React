@@ -2,13 +2,13 @@ import ReduxConstants from "../../../constants/index.constants";
 import { baseurl, handleResponse, headers } from "../../index.actions";
 
 const handleEventRequest = async (request, actionName, dispatch) => {
-  return handleResponse(request, "event." + actionName, dispatch);
+  return handleResponse(request, "admin.event." + actionName, dispatch);
 };
 
 export const createEvent =
   ({ title, description, category, date, isVirtual, address }) =>
   (dispatch) => {
-    dispatch({ type: ReduxConstants.fetch.event.createEvent.LOADING });
+    dispatch({ type: ReduxConstants.fetch.admin.event.createEvent.LOADING });
 
     return handleEventRequest(
       fetch(`${baseurl}/v1/admins/events/create/event`, {
@@ -27,11 +27,13 @@ export const createEvent =
       }),
       "createEvent",
       dispatch
-    );
+    ).then(() => {
+      this.getEvents();
+    });
   };
 
 export const getEvents = () => (dispatch) => {
-  dispatch({ type: ReduxConstants.fetch.event.getEvents.LOADING });
+  dispatch({ type: ReduxConstants.fetch.admin.event.getEvents.LOADING });
 
   return handleEventRequest(
     fetch(`${baseurl}/v1/admins/events/get/events`, {
@@ -46,7 +48,7 @@ export const getEvents = () => (dispatch) => {
 export const updateEvent =
   (id, { title, description, category, date, isVirtual, address }) =>
   (dispatch) => {
-    dispatch({ type: ReduxConstants.fetch.event.updateEvent.LOADING });
+    dispatch({ type: ReduxConstants.fetch.admin.event.updateEvent.LOADING });
 
     return handleEventRequest(
       fetch(`${baseurl}/v1/admins/events/update/event/${id}`, {
@@ -58,11 +60,13 @@ export const updateEvent =
       }),
       "updateEvent",
       dispatch
-    );
+    ).then(() => {
+      this.getEvents();
+    });
   };
 
 export const deleteEvent = (id) => (dispatch) => {
-  dispatch({ type: ReduxConstants.fetch.event.deleteEvent.LOADING });
+  dispatch({ type: ReduxConstants.fetch.admin.event.deleteEvent.LOADING });
 
   return handleEventRequest(
     fetch(`${baseurl}/v1/admins/events/logout/event/${id}`, {
@@ -71,5 +75,7 @@ export const deleteEvent = (id) => (dispatch) => {
     }),
     "deleteEvent",
     dispatch
-  );
+  ).then(() => {
+    this.getEvents();
+  });
 };

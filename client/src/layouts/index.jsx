@@ -1,11 +1,12 @@
-import imagine1 from "assets/img/lawma1.jpg";
+import imagine1 from "assets/img/sidebar-1.jpg";
 import React, { Component } from "react";
 import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
-import AdminNavbar from "../components/Navbars/AdminNavbar";
+import Navbar from "../components/Navbars/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
+import { clearAppError, clearAppSuccess } from "../redux/actions/index.actions";
 import {
   changeFixedClasses,
   changeNotificationSystem,
@@ -18,14 +19,17 @@ import AllRoutes from "../routes.js";
 import { style } from "../variables/Variables.jsx";
 
 const mapStateToProps = (state, props) => {
-  const { root } = state.admin.layout;
+  const { root } = state.layout;
   return {
-    authenticated: state.app.isAuthenticated,
     _notificationSystem: root._notificationSystem,
     image: root.image,
     color: root.color,
     hasImage: root.hasImage,
     fixedClasses: root.fixedClasses,
+
+    authenticated: state.app.isAuthenticated,
+    error: state.app.error,
+    success: state.app.success,
   };
 };
 
@@ -48,13 +52,16 @@ const mapDispatchToProps = (dispatch) => ({
   onRestoreRootDefaultState() {
     dispatch(restoreRootDefaultState());
   },
+
+  invokeClearSuccess() {
+    dispatch(clearAppSuccess());
+  },
+  invokeClearError() {
+    dispatch(clearAppError());
+  },
 });
 
 export class Admin extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   /**
    * @param position tr,tc,tl,br,bc,bl
    * @param message message,
@@ -149,102 +156,49 @@ export class Admin extends Component {
     }
   };
 
-  handleSuccess = () => {
-    const successes = this.props.successes;
-
+  handleSuccess = (success) => {
     const _notificationSystem = this.refs.notificationSystem;
-
     const level = "success";
 
-    successes.length > 0 &&
-      successes.map((success, i) => {
-        _notificationSystem.addNotification({
-          title: <span data-notify="icon" className="fa fa-success" />,
-          message: (
-            <div key={i}>
-              {success.code} {": "}
-              {success.message}
-            </div>
-          ),
-          level: level,
-          position: "tr",
-          autoDismiss: 5,
-          onAdd: (notification) => {
-            this.props.onClearSuccess(i);
-          },
-        });
-      });
+    _notificationSystem.addNotification({
+      title: <span data-notify="icon" className="fa fa-success" />,
+      message: <div>{success}</div>,
+      level: level,
+      position: "tr",
+      autoDismiss: 5,
+      onAdd: (notification) => {
+        this.props.invokeClearSuccess();
+      },
+    });
   };
 
-  handleError = () => {
-    const errors = this.props.errors;
-
+  handleError = (error) => {
     const _notificationSystem = this.refs.notificationSystem;
-
     const level = "error";
 
-    errors.length > 0 &&
-      errors.map((error, i) => {
-        // console.log("handleError: ", error);
-
-        _notificationSystem.addNotification({
-          title: <span data-notify="icon" className="fa fa-danger" />,
-          message: <div key={i}>{error.error?.message ?? error.message}</div>,
-          level: level,
-          position: "br",
-          autoDismiss: 5,
-          onAdd: (notification) => {
-            this.props.onClearError(i);
-          },
-        });
-      });
+    _notificationSystem.addNotification({
+      title: <span data-notify="icon" className="fa fa-danger" />,
+      message: <div>{error}</div>,
+      level: level,
+      position: "br",
+      autoDismiss: 5,
+      onAdd: (notification) => {
+        this.props.invokeClearError();
+      },
+    });
   };
 
   componentDidMount() {
     this.props.onChangeNotificationSystem(this.refs.notificationSystem);
 
-    // this.props.onChangeSidebarBackgroundImage("assets/img/sidebar-3.jpg");
-    // this.props.onChangeSidebarBackgroundColor("orange")
-
-    let _notificationSystem = this.refs.notificationSystem;
-
-    // const color = Math.floor(Math.random() * 4 + 1);
-    let level = "warning";
-
-    // switch (color) {
-    //   case 1:
-    //     level = "success";
-    //     break;
-    //   case 2:
-    //     level = "warning";
-    //     break;
-    //   case 3:
-    //     level = "error";
-    //     break;
-    //   case 4:
-    //     level = "info";
-    //     break;
-    //   default:
-    //     break;
-    // }
-
-    _notificationSystem.addNotification({
-      title: <span data-notify="icon" className="fa fa-user" />,
-      message: (
-        <div>
-          Welcome to <b>Lagos State Waste Management Agentcy (LAWMA) </b> -
-          admin's dashboard.
-        </div>
-      ),
-      level: level,
-      position: "tr",
-      autoDismiss: 5,
-    });
+    this.props.onChangeSidebarBackgroundImage("assets/img/sidebar-3.jpg");
+    this.props.onChangeSidebarBackgroundColor("orange");
   }
 
   componentDidUpdate(e) {
-    this.handleSuccess();
-    this.handleError();
+    const { success, error } = this.props;
+    success && this.handleSuccess(success);
+    error && this.handleError(error);
 
     if (
       window.innerWidth < 993 &&
@@ -265,7 +219,7 @@ export class Admin extends Component {
     const { authenticated, image, color, hasImage } = this.props;
 
     const routes = authenticated ? protectedRoutes : unprotectedRoutes;
-    const redirect = authenticated ? "/dashboard" : "/login";
+    const redirect = authenticated ? "/events" : "/home";
 
     return (
       <div className="wrapper">
@@ -280,33 +234,12 @@ export class Admin extends Component {
         />
 
         <div id="main-panel" className="main-panel" ref="mainPanel">
-          {authenticated && (
-            <AdminNavbar
-              {...this.props}
-              brandText={this.getBrandText(
-                routes,
-                this.props.location.pathname
-              )}
-            />
-          )}
-
           <Switch>
             {this.getRoutes(routes)}
             <Redirect from="/" to={redirect} />
           </Switch>
 
           <Footer />
-
-          {/* <FixedPlugin
-            handleImageClick={this.handleImageClick}
-            handleColorClick={this.handleColorClick}
-            handleHasImage={this.handleHasImage}
-            bgColor={this.props["color"]}
-            bgImage={this.props["image"]}
-            mini={this.props["mini"]}
-            handleFixedClick={this.handleFixedClick}
-            fixedClasses={this.props.fixedClasses}
-          /> */}
         </div>
       </div>
     );

@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { NavLink } from "react-router-dom";
 
-import AdminNavbarLinks from "../Navbars/AdminNavbarLinks.jsx";
+import NavbarLinks from "../Navbars/NavbarLinks.jsx";
 
 import logo from "assets/img/logo.png";
 import { connect } from "react-redux";
 
 const mapStateToProps = (state, props) => ({
-  props
+  props,
 });
 
 const mapDispatchToProps = () => ({});
@@ -17,7 +17,7 @@ class Sidebar extends Component {
     super(props);
 
     this.state = {
-      width: window.innerWidth
+      width: window.innerWidth,
     };
   }
 
@@ -36,7 +36,7 @@ class Sidebar extends Component {
 
   render() {
     const sidebarBackground = {
-      backgroundImage: "url(" + this.props.image + ")"
+      backgroundImage: "url(" + this.props.image + ")",
     };
 
     return (
@@ -46,9 +46,9 @@ class Sidebar extends Component {
         data-color={this.props.color}
         data-image={this.props.image}
       >
-        {this.props.hasImage ? (
+        {/* {this.props.hasImage ? (
           <div className="sidebar-background" style={sidebarBackground} />
-        ) : null}
+        ) : null} */}
         <div className="logo">
           <a href="/" className="simple-text logo-mini">
             <div className="logo-img">
@@ -56,14 +56,12 @@ class Sidebar extends Component {
             </div>
           </a>
           <a href="/" className="simple-text logo-normal">
-            LAWMA
+            TechEventsUK
           </a>
         </div>
 
         <div className="sidebar-wrapper">
           <ul className="nav">
-            {this.state.width <= 991 ? <AdminNavbarLinks /> : null}
-
             {this.props.routes.map((prop, key) => {
               if (!prop.redirect)
                 return (

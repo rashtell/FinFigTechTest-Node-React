@@ -1,115 +1,234 @@
-import { Card } from "components/Card/Card.jsx";
-import Button from "components/CustomButton/CustomButton.jsx";
-import FormInputs from "components/FormInputs/FormInputs";
-import React, { Component } from "react";
-import { Col, Grid, Row } from "react-bootstrap";
+import React from "react";
+import {
+  Button,
+  Card,
+  Container,
+  FloatingLabel,
+  Form,
+  Spinner,
+} from "react-bootstrap";
 import { connect } from "react-redux";
-import RingLoader from "react-spinners/RingLoader";
-import { login, saveLoginDetails } from "../redux/actions/index.actions";
+import {
+  createAdmin,
+  loginAdmin,
+} from "../redux/actions/fetch/admin/admin.actions";
+import {
+  setCreateAdminRequestParams,
+  setLoginAdminRequestParams,
+} from "../redux/actions/index.actions";
 
 const mapStateToProps = (state, props) => {
-  const { request, } = state.admin;
   return {
-    username: request.loginAdmin.username,
-    password: request.loginAdmin.password,
-    fetching: state.fetching
+    createAdminRequest: state.fetch.admin.admin.createAdmin.request,
+    createAdminResponseLoading: state.fetch.admin.admin.createAdmin.loading,
+    createAdminResponse: state.fetch.admin.admin.createAdmin.response.data,
+    createAdminResponseMessage:
+      state.fetch.admin.admin.createAdmin.response.message,
+
+    loginAdminRequest: state.fetch.admin.admin.loginAdmin.request,
+    loginAdminResponseLoading: state.fetch.admin.admin.loginAdmin.loading,
+    loginAdminResponse: state.fetch.admin.admin.loginAdmin.response.data,
+    loginAdminResponseMessage:
+      state.fetch.admin.admin.createAdmin.response.message,
   };
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
-  onTextChange(input) {
-    dispatch(saveLoginDetails(input));
+  invokeSetCreateAdminRequestParams(payload) {
+    dispatch(setCreateAdminRequestParams(payload));
   },
-  onLogin(username, password) {
-    dispatch(login(username, password));
-  }
+  invokeCreateAdmin(payload) {
+    dispatch(createAdmin(payload));
+  },
+
+  invokeSetLoginAdminRequestParams(payload) {
+    dispatch(setLoginAdminRequestParams(payload));
+  },
+  invokeLoginAdmin(payload) {
+    dispatch(loginAdmin(payload));
+  },
 });
 
-class Login extends Component {
+class Login extends React.Component {
+  state = {
+    isNewUser: true,
+  };
+
+  renderBack() {
+    return (
+      <div>
+        <p className="text-start text-muted font-monospace">
+          <a href="/home">Back</a>
+        </p>
+      </div>
+    );
+  }
+
+  renderForm = () => {
+    const {
+      createAdminRequest,
+      createAdminResponseLoading,
+      createAdminResponse,
+      createAdminResponseMessage,
+
+      loginAdminRequest,
+      loginAdminResponseLoading,
+      loginAdminResponse,
+      loginAdminResponseMessage,
+
+      invokeSetCreateAdminRequestParams,
+      invokeCreateAdmin,
+
+      invokeSetLoginAdminRequestParams,
+      invokeLoginAdmin,
+    } = this.props;
+    const { isNewUser } = this.state;
+
+    const request = isNewUser ? createAdminRequest : loginAdminRequest;
+    const responseLoading = isNewUser
+      ? createAdminResponseLoading
+      : loginAdminResponseLoading;
+    const response = isNewUser ? createAdminResponse : loginAdminResponse;
+    const responseMessage = isNewUser
+      ? createAdminResponseMessage
+      : loginAdminResponseMessage;
+
+    const invokeSetParams = isNewUser
+      ? invokeSetCreateAdminRequestParams
+      : invokeSetLoginAdminRequestParams;
+    const invokeAction = isNewUser ? invokeCreateAdmin : invokeLoginAdmin;
+
+    return (
+      <div className="d-flex align-items-center justify-content-center">
+        <Card style={{ width: "24rem" }}>
+          <Card.Body>
+            <div className="mb-3">
+              <div className="d-flex justify-content-end align-items-center">
+                <span className="fs-6 me-3 text-muted">
+                  {isNewUser
+                    ? "Already have an account ? "
+                    : "Dont have an account ? "}
+                </span>
+                <Button
+                  variant="info"
+                  type="button"
+                  size="sm"
+                  onClick={() => {
+                    this.setState({ isNewUser: !isNewUser });
+                  }}
+                >
+                  {isNewUser ? "Login" : "Create account"}
+                </Button>
+              </div>
+
+              <h3 className="text-center">
+                {isNewUser ? "Create account" : "Login"}
+              </h3>
+            </div>
+
+            <Form>
+              <FloatingLabel
+                controlId="username"
+                label="Username"
+                className="mb-3"
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="e.g john_wick"
+                  onChange={(e) => {
+                    const value = e.currentTarget.value;
+                    invokeSetParams({ username: value });
+                  }}
+                  value={request.username}
+                />
+              </FloatingLabel>
+
+              <FloatingLabel
+                controlId="password"
+                label="Password"
+                className="mb-3"
+              >
+                <Form.Control
+                  type="password"
+                  placeholder="**********"
+                  onChange={(e) => {
+                    const value = e.currentTarget.value;
+                    invokeSetParams({ password: value });
+                  }}
+                  value={request.password}
+                />
+              </FloatingLabel>
+
+              <FloatingLabel
+                controlId="name"
+                label="Name"
+                className="mb-3"
+                hidden={!isNewUser}
+              >
+                <Form.Control
+                  type="text"
+                  placeholder="e.g Adele Enoeasy"
+                  onChange={(e) => {
+                    const value = e.currentTarget.value;
+                    invokeSetParams({ name: value });
+                  }}
+                  value={request.name ?? ""}
+                />
+              </FloatingLabel>
+
+              <FloatingLabel
+                controlId="email"
+                label="Email address"
+                className="mb-3"
+                hidden={!isNewUser}
+              >
+                <Form.Control
+                  type="email"
+                  placeholder="e.g shivers@edsheeran.music"
+                  onChange={(e) => {
+                    const value = e.currentTarget.value;
+                    invokeSetParams({ email: value });
+                  }}
+                  value={request.email ?? ""}
+                />
+
+                <Form.Text className="text-muted">
+                  We'll never share your email with anyone else.
+                </Form.Text>
+              </FloatingLabel>
+
+              <Button
+                variant="primary"
+                type="button"
+                onClick={(e) => {
+                  invokeAction(request);
+                }}
+                disabled={responseLoading}
+              >
+                {responseLoading ? (
+                  <span>
+                    <span className="text-primary me-2">Submitting</span>
+                    <Spinner animation="grow" variant="primary" size="sm" />
+                  </span>
+                ) : (
+                  <span>Submit</span>
+                )}
+              </Button>
+            </Form>
+          </Card.Body>
+        </Card>
+      </div>
+    );
+  };
+
   render() {
-    const { onTextChange, onLogin, username, password, fetching } = this.props;
+    const {} = this.props;
     return (
       <div className="content">
-
-        <Grid fluid>
-          <div className="card">
-            <div className="header">
-              <h4 className="title">
-                <RingLoader
-                  size={30}
-                  loading={fetching}
-                />
-                Admin
-              </h4>
-
-              <p className="category">
-              Agents
-              </p>
-            </div>
-
-            <div className="content">
-              <Grid fluid>
-                <Row>
-                  <Col md={8}>
-                    <Card
-                      title="Login"
-                      content={
-                        <form>
-                          <FormInputs
-                            ncols={["col-md-12"]}
-                            properties={[
-                              {
-                                label: "Username",
-                                type: "text",
-                                bsClass: "form-control",
-                                placeholder: "Username",
-                                value: username,
-
-                                onChange: e => {
-                                  let value = e.currentTarget.value;
-                                  onTextChange({ username: value });
-                                }
-                              }
-                            ]}
-                          />
-                          <FormInputs
-                            ncols={["col-md-12"]}
-                            properties={[
-                              {
-                                label: "Password",
-                                type: "password",
-                                bsClass: "form-control",
-                                placeholder: "Password",
-                                value: password,
-                                onChange: e => {
-                                  let value = e.currentTarget.value;
-                                  onTextChange({ password: value });
-                                }
-                              }
-                            ]}
-                          />
-
-                          <Button
-                            bsStyle="primary"
-                            fill
-                            type="submit"
-                            onClick={e => {
-                              e.preventDefault();
-                              onLogin(username, password);
-                            }}
-                          >
-                            Login
-                          </Button>
-                          <div className="clearfix" />
-                        </form>
-                      }
-                    />
-                  </Col>
-                </Row>
-              </Grid>
-            </div>
-          </div>
-        </Grid>
+        <Container className="">
+          {this.renderBack()}
+          {this.renderForm()}
+        </Container>
       </div>
     );
   }

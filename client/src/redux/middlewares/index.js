@@ -1,9 +1,11 @@
 import thunk from "redux-thunk";
-import { consoleReduxState } from "./consoleReduxState";
+import { autoLogout } from "./autoLogout";
+import { syncAuthState } from "./syncAuthState";
 
 export const Middlewares = [
-    thunk, 
-    // consoleReduxState
+  thunk,
+  syncAuthState,
+  autoLogout,
 ];
 
 export default Middlewares;

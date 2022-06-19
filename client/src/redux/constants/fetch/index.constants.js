@@ -6,12 +6,13 @@ const FetchConstants = {
   /**
    * Admin Constants
    */
-  admin: { ...AdminContants },
-
-  /**
-   * Admin Event Constants
-   */
-  event: { ...AdminEventContants },
+  admin: {
+    ...AdminContants,
+    
+    /**
+     * Admin Event Constants
+     */ event: { ...AdminEventContants },
+  },
 
   /**
    * User Event Constants
