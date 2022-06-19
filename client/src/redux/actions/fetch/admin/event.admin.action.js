@@ -1,6 +1,13 @@
 import ReduxConstants from "../../../constants/index.constants";
 import { baseurl, handleResponse, headers } from "../../index.actions";
 
+/**
+ * This function appends module specific settings before handing over
+ * @param {Request} request
+ * @param {strign} actionName
+ * @param {Dispatch} dispatch
+ * @returns Promise<array>
+ */
 const handleEventRequest = async (request, actionName, dispatch) => {
   return handleResponse(request, "admin.event." + actionName, dispatch);
 };
@@ -28,6 +35,7 @@ export const createEvent =
       "createEvent",
       dispatch
     ).then(() => {
+      //get an updated list of the admin's events
       this.getEvents();
     });
   };
@@ -61,6 +69,7 @@ export const updateEvent =
       "updateEvent",
       dispatch
     ).then(() => {
+      //get an updated list of the admin's events
       this.getEvents();
     });
   };

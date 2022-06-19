@@ -1,10 +1,9 @@
 import imagine1 from "assets/img/sidebar-1.jpg";
-import React, { Component } from "react";
+import { Component } from "react";
 import NotificationSystem from "react-notification-system";
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from "react-router-dom";
 import Footer from "../components/Footer/Footer";
-import Navbar from "../components/Navbars/Navbar";
 import Sidebar from "../components/Sidebar/Sidebar";
 import { clearAppError, clearAppSuccess } from "../redux/actions/index.actions";
 import {
@@ -13,7 +12,7 @@ import {
   changeSidebarBackgroundColor,
   changeSidebarBackgroundImage,
   restoreRootDefaultState,
-  toggleHasBackground,
+  toggleHasBackground
 } from "../redux/actions/layout/layout.action";
 import AllRoutes from "../routes.js";
 import { style } from "../variables/Variables.jsx";

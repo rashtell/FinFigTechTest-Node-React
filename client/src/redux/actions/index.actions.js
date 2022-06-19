@@ -1,6 +1,11 @@
 import ReduxConstants from "../constants/index.constants";
 
 //#region Request helpers
+/**
+ * This function setsup the header for all api requests
+ * It appends the authentication token from staorage
+ * @returns object
+ */
 export const headers = () => ({
   Authorization: `Bearer ${localStorage.getItem("figfin-token")}`,
   "Content-Type": "application/json",
@@ -9,6 +14,13 @@ export const headers = () => ({
 const port = process.env.PORT ?? 4480;
 export const baseurl = "http://localhost:" + port;
 
+/**
+ * This method handles all common procedures in fetch actions
+ * @param {Request} request
+ * @param {string} actionName
+ * @param {Dispatch} dispatch
+ * @returns Promise<object>
+ */
 export const handleResponse = async (request, actionName = "", dispatch) => {
   let fetchConstant = ReduxConstants.fetch;
   fetchConstant = [fetchConstant, ...actionName.split(".")].reduce(

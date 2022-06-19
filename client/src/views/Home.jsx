@@ -7,7 +7,6 @@ import {
   Container,
   FloatingLabel,
   Form,
-  Placeholder,
   Row,
   Spinner,
 } from "react-bootstrap";
@@ -60,6 +59,7 @@ const mapDispatchToProps = (dispatch) => ({
 
 class Home extends React.Component {
   componentDidMount() {
+    //get all events and event categories
     this.props.invokeGetEventCategories();
     this.props.invokeSearchEvent({
       title: "",
@@ -71,6 +71,11 @@ class Home extends React.Component {
     });
   }
 
+  /**
+   * This methods converts any date format to the input date accepted format
+   * @param {string} dateString
+   * @returns string
+   */
   getInputDateFormat(dateString) {
     const month = new Date(dateString).getUTCMonth();
     const fullMonth = month < 10 ? "0" + month : month;
@@ -84,10 +89,10 @@ class Home extends React.Component {
     );
   }
 
-  renderHeader() {
-    return <Header />;
-  }
-
+  /**
+   * This method renders the search panel
+   * @returns JSX
+   */
   renderSearchArea = () => {
     const {
       searchEventRequest,
@@ -279,8 +284,13 @@ class Home extends React.Component {
     );
   };
 
+  /**
+   * This method renders all events
+   * @returns JSX
+   */
   renderEvents() {
     const { searchEventResponse, searchEventIsLoading } = this.props;
+
     const eventViews = searchEventResponse.map((event, i) => (
       <Row key={i}>
         <Col>
@@ -313,22 +323,16 @@ class Home extends React.Component {
     return (
       <div>
         <h3 className="font-monospace">Events</h3>
-        <div>
-          {searchEventIsLoading ? this.renderEventPlaceholders() : eventViews}
-        </div>
+        <div>{searchEventIsLoading ? <EventPlaceholder /> : eventViews}</div>
       </div>
     );
-  }
-
-  renderEventPlaceholders() {
-    return <EventPlaceholder />;
   }
 
   render() {
     return (
       <div className="content">
         <Container className="mb-2">
-          {this.renderHeader()}
+          <Header />
           {this.renderSearchArea()}
         </Container>
         <Container fluid>{this.renderEvents()}</Container>

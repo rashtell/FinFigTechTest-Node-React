@@ -54,6 +54,10 @@ class Login extends React.Component {
     isNewUser: true,
   };
 
+  /**
+   * This method renders the back button
+   * @returns JSX
+   */
   renderBack() {
     return (
       <div>
@@ -64,6 +68,10 @@ class Login extends React.Component {
     );
   }
 
+  /**
+   * This function renders the signup and login forms
+   * @returns JSX
+   */
   renderForm = () => {
     const {
       createAdminRequest,
@@ -84,6 +92,7 @@ class Login extends React.Component {
     } = this.props;
     const { isNewUser } = this.state;
 
+    //select params and methods based on the current mode (new or existing)
     const request = isNewUser ? createAdminRequest : loginAdminRequest;
     const responseLoading = isNewUser
       ? createAdminResponseLoading

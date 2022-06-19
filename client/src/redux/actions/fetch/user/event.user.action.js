@@ -1,6 +1,13 @@
 import ReduxConstants from "../../../constants/index.constants";
 import { baseurl, handleResponse, headers } from "../../index.actions";
 
+/**
+ * This function appends module specific settings before handing over
+ * @param {Request} request
+ * @param {strign} actionName
+ * @param {Dispatch} dispatch
+ * @returns Promise<array>
+ */
 const handleEventRequest = async (request, actionName, dispatch) => {
   return handleResponse(request, "event." + actionName, dispatch);
 };

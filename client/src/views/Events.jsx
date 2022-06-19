@@ -1,173 +1,392 @@
+import React from "react";
 import {
-  createTransaction,
-  getTransactions,
-  saveCreatetTransaction,
-} from "../redux/actions/index.actions";
-import Card from "../components/Card/Card.jsx";
-import Button from "../components/CustomButton/CustomButton.jsx";
-import TransactionView from "../components/Customs/TransactionView";
-import { FormInputs } from "../components/FormInputs/FormInputs.jsx";
-import React, { Component } from "react";
-import { Col, Grid, Row, ControlLabel } from "react-bootstrap";
+  Accordion,
+  Button,
+  Card,
+  Col,
+  Container,
+  FloatingLabel,
+  Form,
+  Row,
+  Spinner
+} from "react-bootstrap";
 import { connect } from "react-redux";
+import Header from "../components/Header/Header";
+import EventPlaceholder from "../components/Placeholder/EventPlaceholder";
+import {
+  createEvent,
+  deleteEvent,
+  getEvents,
+  updateEvent
+} from "../redux/actions/fetch/admin/event.admin.action";
+import {
+  setAdminCreateEventRequestParams,
+  setAdminUpdateEventRequestParams
+} from "../redux/actions/index.actions";
 
 const mapStateToProps = (state, props) => {
-  const {
-    getAdminTransactions: transactions,
-    loginAdmin: login,
-  } = state.admin.response;
-  const {
-    createAdminTransaction: createTransaction,
-  } = state.transaction.request;
   return {
-    props,
-    transactions,
-    adminID: login.id,
-    organizationID: login.organizationID,
-    weight: createTransaction.weight,
-    cardID: createTransaction.cardID,
+    getEventsIsLoading: state.fetch.admin.event.getEvents.loading,
+    getEventsResponseMessage:
+      state.fetch.admin.event.getEvents.response.message,
+    getEventsResponse: state.fetch.admin.event.getEvents.response.data,
+
+    createEventRequest: state.fetch.admin.event.createEvent.request,
+    createEventIsLoading: state.fetch.admin.event.createEvent.loading,
+    createEventResponseMessage:
+      state.fetch.admin.event.createEvent.response.message,
+    createEventResponse: state.fetch.admin.event.createEvent.response.data,
+
+    updateEventRequest: state.fetch.admin.event.updateEvent.request,
+    updateEventIsLoading: state.fetch.admin.event.updateEvent.loading,
+    updateEventResponseMessage:
+      state.fetch.admin.event.updateEvent.response.message,
+    updateEventResponse: state.fetch.admin.event.updateEvent.response.data,
+
+    deleteEventIsLoading: state.fetch.admin.event.deleteEvent.loading,
+    deleteEventResponseMessage:
+      state.fetch.admin.event.deleteEvent.response.message,
+    deleteEventResponse: state.fetch.admin.event.deleteEvent.response.data,
   };
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onGetTransactions() {
-    dispatch(getTransactions());
+  invokeAdminGetEvent() {
+    dispatch(getEvents());
   },
-  onCardIDInput(cardID) {
-    dispatch(saveCreatetTransaction({ cardID }));
+
+  invokeSetAdminCreateEventParams(payload) {
+    dispatch(setAdminCreateEventRequestParams(payload));
   },
-  onWeightInput(weight) {
-    dispatch(saveCreatetTransaction({ weight }));
+  invokeAdminCreateEvent(payload) {
+    dispatch(createEvent(payload));
   },
-  onCreateTransaction({
-    cardID,
-    adminID,
-    organizationID,
-    deviceID,
-    weight,
-  }) {
-    dispatch(
-      createTransaction({
-        cardID,
-        adminID,
-        organizationID,
-        deviceID,
-        weight,
-      })
-    );
+
+  invokeSetAdminUpdateEventParams(payload) {
+    dispatch(setAdminUpdateEventRequestParams(payload));
+  },
+  invokeAdminUpdateEvent(payload) {
+    dispatch(updateEvent(payload));
+  },
+
+  invokeAdminDeleteEvent(id) {
+    dispatch(deleteEvent(id));
   },
 });
 
-class Events extends Component {
-  constructor(props) {
-    super(props);
+class Events extends React.Component {
+  state = {
+    isCreate: true,
+  };
 
-    this.props.onGetTransactions();
+  componentDidMount() {
+    //get all admin's events
+    this.props.invokeAdminGetEvent();
+  }
+
+  updateEvent(event) {
+    //set the select event (for update) details to the request parasms state
+    this.props.setAdminUpdateEventRequestParams(event);
+
+    //scroll to the edit form
+    window.scrollTo(0, 0);
+  }
+
+  deleteEvent(id) {
+    const { invokeAdminDeleteEvent } = this.props;
+
+    //double check if you really want to delete this event
+    if (window.confirm("Are you sure you want to delete this event ? ")) {
+      invokeAdminDeleteEvent(id);
+    }
+  }
+
+  /**
+   * This methods converts any date format to the input date accepted format
+   * @param {string} dateString
+   * @returns string
+   */
+  getInputDateFormat(dateString) {
+    const month = new Date(dateString).getUTCMonth();
+    const fullMonth = month < 10 ? "0" + month : month;
+
+    return (
+      new Date(dateString).getFullYear() +
+      "-" +
+      fullMonth +
+      "-" +
+      new Date(dateString).getDate()
+    );
+  }
+
+  /**
+   * This function handles the creation and updating of events
+   * @returns JSX
+   */
+  renderCreateEvent = () => {
+    const {
+      createEventRequest,
+      createEventIsLoading,
+      createEventResponseMessage,
+      createEventResponse,
+
+      updateEventRequest,
+      updateEventIsLoading,
+      updateEventResponseMessage,
+      updateEventResponse,
+
+      invokeSetAdminCreateEventParams,
+      invokeAdminCreateEvent,
+
+      invokeSetAdminUpdateEventParams,
+      invokeAdminUpdateEvent,
+    } = this.props;
+    const { isCreate } = this.state;
+
+    //select params and methods based on the current mode (create or update)
+    const request = isCreate ? createEventRequest : updateEventRequest;
+    const loading = isCreate ? createEventIsLoading : updateEventIsLoading;
+    const responseMessage = isCreate
+      ? createEventResponseMessage
+      : updateEventResponseMessage;
+    const response = isCreate ? createEventResponse : updateEventResponse;
+
+    const setRequestParams = isCreate
+      ? invokeSetAdminCreateEventParams
+      : invokeSetAdminUpdateEventParams;
+    const actionEvent = isCreate
+      ? invokeAdminCreateEvent
+      : invokeAdminUpdateEvent;
+
+    //convert the unix date format from state to input acceptable format
+    const eventDate = this.getInputDateFormat(request.date);
+
+    const header = isCreate ? "Create event" : "Update event";
+
+    return (
+      <Card>
+        <Card.Body>
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item eventKey="0">
+              <Accordion.Header>{header}</Accordion.Header>
+
+              <Accordion.Body>
+                <Form>
+                  <Row>
+                    <Col>
+                      <FloatingLabel
+                        controlId="eventTitle"
+                        label="Title"
+                        className="mb-2"
+                      >
+                        <Form.Control
+                          type="text"
+                          onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setRequestParams({ title: value });
+                          }}
+                          value={request.title}
+                        />
+                      </FloatingLabel>
+                    </Col>
+
+                    <Col>
+                      <FloatingLabel
+                        controlId="eventDescription"
+                        label="Description"
+                        className="mb-2"
+                      >
+                        <Form.Control
+                          type="text"
+                          onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setRequestParams({ description: value });
+                          }}
+                          value={request.description}
+                        />
+                      </FloatingLabel>
+                    </Col>
+
+                    <Col>
+                      <FloatingLabel
+                        controlId="eventCategory"
+                        label="Category"
+                        className="mb-2"
+                      >
+                        <Form.Control
+                          type="text"
+                          onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setRequestParams({ category: value });
+                          }}
+                          value={request.category}
+                        />
+                      </FloatingLabel>
+                    </Col>
+                  </Row>
+
+                  <Row>
+                    <Col>
+                      <FloatingLabel
+                        controlId="eventAddress"
+                        label="Address"
+                        className="mb-2"
+                      >
+                        <Form.Control
+                          type="text"
+                          onChange={(e) => {
+                            const value = e.currentTarget.value;
+                            setRequestParams({ address: value });
+                          }}
+                          value={request.address}
+                        />
+                      </FloatingLabel>
+                    </Col>
+
+                    <Col>
+                      <FloatingLabel
+                        controlId="eventDate"
+                        label="Date"
+                        className="mb-2"
+                      >
+                        <Form.Control
+                          type="date"
+                          onChange={(e) => {
+                            let value = e.currentTarget.value;
+                            value = value ? new Date(value).valueOf() : value;
+                            setRequestParams({ date: value });
+                          }}
+                          value={eventDate}
+                        />
+                      </FloatingLabel>
+                    </Col>
+
+                    <Col>
+                      <Form.Check
+                        type="switch"
+                        id={"is-virtual-switch"}
+                        label={"Virtual event"}
+                        onChange={(e) => {
+                          setRequestParams({
+                            isVirtual: !request.isVirtual,
+                          });
+                        }}
+                        checked={request.isVirtual ?? false}
+                      />
+                    </Col>
+                  </Row>
+
+                  <Button
+                    className="mt-3 "
+                    variant="primary"
+                    type="button"
+                    disabled={loading}
+                    onClick={() => {
+                      actionEvent(request);
+                    }}
+                  >
+                    {loading ? (
+                      <span>
+                        <span className="text-primary me-2">
+                          {isCreate ? "Creating" : "Updating"}
+                        </span>
+                        <Spinner animation="grow" variant="primary" size="sm" />
+                      </span>
+                    ) : (
+                      <span>{isCreate ? "Create" : "Update"}</span>
+                    )}
+                  </Button>
+                </Form>
+              </Accordion.Body>
+            </Accordion.Item>
+          </Accordion>
+        </Card.Body>
+      </Card>
+    );
+  };
+
+  /**
+   * This method renders all the admin's events
+   * @returns JSX
+   */
+  renderEvents() {
+    const { getEventsResponse, getEventsIsLoading } = this.props;
+
+    const eventViews = getEventsResponse.map((event, i) => (
+      <Row key={i}>
+        <Col>
+          <Card className="">
+            <Card.Header>
+              <div className="d-flex justify-content-between align-items-center">
+                <span> {event.category}</span>
+
+                <span>
+                  <span className="me-3">
+                    <button
+                      type="button"
+                      className="btn btn-light"
+                      onClick={() => this.updateEvent(event)}
+                    >
+                      <i className="fa fa-edit text-info"></i>
+                    </button>
+                  </span>
+                  <span>
+                    <button
+                      type="button"
+                      className="btn btn-light"
+                      onClick={() => this.deleteEvent(event._id)}
+                    >
+                      <i className="fa fa-trash text-danger"></i>
+                    </button>
+                  </span>
+                </span>
+              </div>
+            </Card.Header>
+
+            <Card.Body>
+              <Card.Title className="h3">
+                {event.title.toLocaleUpperCase()}
+              </Card.Title>
+
+              <Card.Text>{event.description.toLocaleLowerCase()}</Card.Text>
+
+              <Card.Text className="text-muted">
+                {event.isVirtual
+                  ? "This is a virtual event"
+                  : "This is a physical event"}
+              </Card.Text>
+
+              <Card.Text className="test-info">
+                Address: {event.address}
+              </Card.Text>
+            </Card.Body>
+
+            <Card.Footer className="text-muted">
+              {new Date(event.date).toDateString()}
+            </Card.Footer>
+          </Card>
+        </Col>
+      </Row>
+    ));
+
+    return (
+      <div>
+        <h3 className="font-monospace">Your events</h3>
+        <div>{getEventsIsLoading ? <EventPlaceholder /> : eventViews}</div>
+      </div>
+    );
   }
 
   render() {
-    const {
-      onCardIDInput,
-      onWeightInput,
-      onCreateTransaction,
-      onGetTransactions,
-      transactions,
-      adminID,
-      organizationID,
-      weight,
-      cardID,
-    } = this.props;
-
-    const pointRatio = 0.1;
-
-    const deviceID = "WEB_EXTERNAL_AGENT_" + adminID;
+    const {} = this.props;
 
     return (
       <div className="content">
-        <Grid fluid>
-          <Row>
-            <Col md={12}>
-              <Card
-                title="Create a transaction"
-                content={
-                  <form>
-                    <h4>
-                      The curent rate is {pointRatio * 100}gramms for 1 point
-                    </h4>
-                    <FormInputs
-                      ncols={["col-md-6", "col-md-6"]}
-                      properties={[
-                        {
-                          label: "Card Serial",
-                          type: "number",
-                          bsClass: "form-control",
-                          placeholder: "Card Serial",
-                          value: cardID,
-                          onChange: (e) => {
-                            let value = e.currentTarget.value;
-                            onCardIDInput(value);
-                          },
-                        },
-                        {
-                          label: "Weight (gramms)",
-                          type: "number",
-                          bsClass: "form-control",
-                          placeholder: "Weight (gramms)",
-                          value: weight,
-                          onChange: (e) => {
-                            let value = e.currentTarget.value;
-                            onWeightInput(value);
-                          },
-                        },
-                      ]}
-                    />
-
-                    <Button
-                      bsStyle="info"
-                      fill
-                      type="submit"
-                      onClick={(e) => {
-                        e.preventDefault();
-
-                        if (
-                          window.confirm(
-                            "The points for this transaction in " +
-                              weight * pointRatio +
-                              ". Are you sure you want to proceed ?"
-                          )
-                        ) {
-                          onCreateTransaction({
-                            cardID,
-                            adminID,
-                            organizationID,
-                            deviceID,
-                            weight,
-                          });
-                        }
-                      }}
-                    >
-                      Create Transaction
-                    </Button>
-
-                    <div className="clearfix" />
-                  </form>
-                }
-              />
-
-              <div>
-                <Button pullRight simple onClick={onGetTransactions}>
-                  <img
-                    src="/images/refresh.png"
-                    alt="refresh transactions"
-                    width="20"
-                    height="20"
-                  />
-                </Button>
-              </div>
-              <TransactionView transactions={transactions} />
-            </Col>
-          </Row>
-        </Grid>
+        <Container className="mb-2">
+          <Header />
+          {this.renderCreateEvent()}
+        </Container>
+        <Container fluid>{this.renderEvents()}</Container>
       </div>
     );
   }

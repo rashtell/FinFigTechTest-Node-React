@@ -7,6 +7,13 @@ import {
   setAuthState,
 } from "../../index.actions";
 
+/**
+ * This function appends module specific settings before handing over
+ * @param {Request} request
+ * @param {strign} actionName
+ * @param {Dispatch} dispatch
+ * @returns Promise<array>
+ */
 const handleAdminRequest = async (request, actionName, dispatch) => {
   return handleResponse(request, "admin." + actionName, dispatch);
 };
@@ -48,6 +55,7 @@ export const loginAdmin =
       "loginAdmin",
       dispatch
     ).then((resJon) => {
+      //handle token storage and authentication process
       if (resJon.extra && resJon.extra.token) {
         const token = resJon.extra.token ?? "";
 
@@ -82,6 +90,8 @@ export const logoutAdmin = () => (dispatch) => {
     "logoutAdmin",
     dispatch
   ).then((resJson) => {
+    
+    //Invalidate locally stored token
     dispatch(logoutLocaly());
   });
 };

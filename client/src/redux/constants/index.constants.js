@@ -1,6 +1,9 @@
 import FetchConstants from "./fetch/index.constants";
 import LayoutConstants from "./layout/layout.constants";
 
+/**
+ * Single output for all redux constants
+ */
 const ReduxConstants = {
   /**
    * Fetch Constants

@@ -1,6 +1,9 @@
 import React from "react";
 import { Card, Col, Placeholder, Row } from "react-bootstrap";
 
+/**
+ * This component renders the placeholders for event list
+ */
 class EventPlaceholder extends React.Component {
   render() {
     return [{}, {}, {}, {}].map((event, i) => (

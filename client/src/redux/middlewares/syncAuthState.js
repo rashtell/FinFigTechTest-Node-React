@@ -1,6 +1,11 @@
 import { setAuthState } from "../actions/index.actions";
 import ReduxConstants from "../constants/index.constants";
 
+/**
+ * This middleware handles authentication state persistence sychng to state
+ * @param {*} store
+ * @returns Response
+ */
 export const syncAuthState = (store) => (next) => (action) => {
   const state = store.getState();
   const authed = localStorage.getItem("figfin-authed") ?? null;

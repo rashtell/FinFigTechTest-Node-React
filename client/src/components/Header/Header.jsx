@@ -17,6 +17,10 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class Header extends React.Component {
+  /**
+   * This method renders the Logout button label
+   * @returns JSX
+   */
   renderLogoutButtonLabel() {
     const { adminLogoutResponseLoading } = this.props;
 
@@ -46,7 +50,7 @@ class Header extends React.Component {
           </Button>
         ) : (
           <p className="text-end text-muted font-monospace">
-            <a href="/login">Create an account or Login</a>
+            <a href="/login">Signup or Login</a>
           </p>
         )}
       </div>
