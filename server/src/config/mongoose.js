@@ -17,7 +17,6 @@ module.exports = (app) => {
     )
     .then((res) => console.log("mongo conneceted"))
     .catch((err) => {
-      console.log(err.message);
       LogError(err.message);
     });
 

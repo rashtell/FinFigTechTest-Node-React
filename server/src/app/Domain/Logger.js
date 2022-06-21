@@ -5,26 +5,22 @@ const fs = require("fs");
  * @param {string} error
  */
 export const LogError = (error) => {
-  console.log({ LogError: error });
   error = `\n${new Date().toDateString()} - ${new Date().toLocaleTimeString()} :=> ${error}`;
 
   const dir = "src/logs";
 
   fs.appendFile(dir + "/node.error.log", error, function (err) {
     if (err) {
-      console.log("Log error: ", err);
     }
   });
 };
 
 export const LogAccountError = (error) => {
-  console.log({ error });
   error = `\n${new Date().toDateString()} - ${new Date().toLocaleTimeString()} :=> ${error}`;
 
   const dir = "src/logs";
 
   fs.appendFile(dir + "/node.accoount.error.log", error, function (err) {
-    console.log("Log error: ", err);
   });
 };
 

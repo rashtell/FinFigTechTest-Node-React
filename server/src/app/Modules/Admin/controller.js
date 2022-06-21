@@ -58,7 +58,6 @@ export async function cLoginAdmin(req, res) {
   } catch (err) {
     LogError("cLoginAdmin: " + err.message);
 
-    console.log(err);
     return res.status(400).json({
       type: "error",
       msg: err.message,
