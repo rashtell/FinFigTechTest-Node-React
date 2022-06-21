@@ -18,11 +18,14 @@ const mapDispatchToProps = (dispatch) => ({
 });
 
 class Header extends React.Component {
+  logout = () => {
+    this.props.invokeLogoutAdmin();
+  };
   /**
    * This method renders the Logout button label
    * @returns JSX
    */
-  renderLogoutButtonLabel() {
+  renderLogoutButtonLabel = () => {
     const { adminLogoutResponseLoading } = this.props;
 
     return adminLogoutResponseLoading ? (
@@ -33,10 +36,10 @@ class Header extends React.Component {
     ) : (
       <span>Logout</span>
     );
-  }
+  };
 
   render() {
-    const { authenticated, invokeLogoutAdmin } = this.props;
+    const { authenticated } = this.props;
 
     return (
       <div className="d-flex align-items-end justify-content-end">
@@ -45,7 +48,7 @@ class Header extends React.Component {
             variant="light"
             type="button"
             className="mb-2"
-            onClick={invokeLogoutAdmin}
+            onClick={this.logout}
           >
             {this.renderLogoutButtonLabel()}
           </Button>
