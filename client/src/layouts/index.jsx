@@ -12,7 +12,7 @@ import {
   changeSidebarBackgroundColor,
   changeSidebarBackgroundImage,
   restoreRootDefaultState,
-  toggleHasBackground
+  toggleHasBackground,
 } from "../redux/actions/layout/layout.action";
 import AllRoutes from "../routes.js";
 import { style } from "../variables/Variables.jsx";
@@ -71,25 +71,6 @@ export class Admin extends React.Component {
     message = "Notifying you to wash your hands and stay safe",
     level = "info"
   ) => {
-    // var color = Math.floor(Math.random() * 4 + 1);
-    // var level;
-    // switch (color) {
-    //   case 1:
-    //     level = "success";
-    //     break;
-    //   case 2:
-    //     level = "warning";
-    //     break;
-    //   case 3:
-    //     level = "error";
-    //     break;
-    //   case 4:
-    //     level = "info";
-    //     break;
-    //   default:
-    //     break;
-    // }
-
     this.props._notificationSystem.addNotification({
       title: <span data-notify="icon" className="pe-7s-gift" />,
       message: <div>{message}.</div>,
