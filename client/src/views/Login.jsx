@@ -9,6 +9,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import {
   createAdmin,
   loginAdmin,
@@ -63,6 +64,14 @@ class Login extends React.Component {
     isNewUser: true,
   };
 
+  changeToLoginPage = () => {
+    this.setState({ isNewUser: false });
+  };
+
+  changeToSignupPage = () => {
+    this.setState({ isNewUser: true });
+  };
+
   /**
    * This method renders the back button
    * @returns JSX
@@ -71,7 +80,7 @@ class Login extends React.Component {
     return (
       <div>
         <p className="text-start text-muted font-monospace">
-          <a href="/home">Back</a>
+          <Link to="/home">Back</Link>
         </p>
       </div>
     );
@@ -81,7 +90,7 @@ class Login extends React.Component {
    * This method handles error message rendering for create and login admin
    * @returns JSX
    */
-  renderError() {
+  renderMessage() {
     const { isNewUser } = this.state;
     const {
       createAdminResponseMessage,
@@ -112,6 +121,21 @@ class Login extends React.Component {
 
       return (
         <Alert key="danger" variant="danger">
+          {responseMessage}
+        </Alert>
+      );
+    }
+
+    //check if response message is a success message
+    if (responseMessage && !response.username) {
+      //clear response message after 3 seconds
+      setTimeout(() => {
+        invokeClearAction();
+        this.changeToLoginPage();
+      }, 3000);
+
+      return (
+        <Alert key="success" variant="success">
           {responseMessage}
         </Alert>
       );
@@ -186,7 +210,7 @@ class Login extends React.Component {
                 {isNewUser ? "Create account" : "Login"}
               </h3>
 
-              {this.renderError()}
+              {this.renderMessage()}
             </div>
 
             <Form>
