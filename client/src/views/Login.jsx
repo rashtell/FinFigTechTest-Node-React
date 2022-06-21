@@ -127,7 +127,7 @@ class Login extends React.Component {
     }
 
     //check if response message is a success message
-    if (responseMessage && !response.username) {
+    if (responseMessage && response.username) {
       //clear response message after 3 seconds
       setTimeout(() => {
         invokeClearAction();
