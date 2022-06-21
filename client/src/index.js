@@ -11,15 +11,16 @@ import AdminLayout from "./layouts/index.jsx";
 import { setAppError } from "./redux/actions/index.actions";
 import storeFactory from "./redux/store";
 
-
 const handleError = (error) => {
   store.dispatch(setAppError(error.message));
 };
 
 const store = storeFactory();
 
-window.React = React;
-window.store = store;
+if (process.env.NODE_ENV === "development") {
+  window.React = React;
+  window.store = store;
+}
 
 window.addEventListener("error", handleError);
 
