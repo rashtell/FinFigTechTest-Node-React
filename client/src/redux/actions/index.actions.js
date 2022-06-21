@@ -96,7 +96,6 @@ export const setLoginAdminRequestParams = (payload) => ({
 
 export const logoutLocaly = () => (dispatch) => {
   dispatch({ type: ReduxConstants.app.UNSET_AUTHENTICATED });
-  console.log("logoutLocaly");
   localStorage.removeItem("figfin-token");
   localStorage.removeItem("figfin-authed");
 };
