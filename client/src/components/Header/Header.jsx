@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Spinner } from "react-bootstrap";
 import { connect } from "react-redux";
+import { Link } from "react-router-dom";
 import { logoutAdmin } from "../../redux/actions/fetch/admin/admin.actions";
 
 const mapStateToProps = (state, props) => {
@@ -50,7 +51,7 @@ class Header extends React.Component {
           </Button>
         ) : (
           <p className="text-end text-muted font-monospace">
-            <a href="/login">Signup or Login</a>
+            <Link to="/login">Signup or Login</Link>
           </p>
         )}
       </div>
